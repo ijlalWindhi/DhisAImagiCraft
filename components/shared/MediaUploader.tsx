@@ -1,5 +1,9 @@
+"use client";
+
 import { useToast } from "@/components/ui/use-toast";
+import { dataUrl, getImageSize } from "@/lib/utils";
 import { CldImage, CldUploadWidget } from "next-cloudinary";
+import { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 
 type MediaUploaderProps = {
@@ -20,6 +24,16 @@ const MediaUploader = ({
   const { toast } = useToast();
 
   const onUploadSuccessHandler = (result: any) => {
+    setImage((prevState: any) => ({
+      ...prevState,
+      publicId: result?.info?.public_id,
+      width: result?.info?.width,
+      height: result?.info?.height,
+      secureUrl: result?.info?.secure_url,
+    }));
+
+    onValueChange(result?.info?.public_id);
+
     toast({
       title: "Image upload successful",
       description: "1 credit was deducted from your account.",
@@ -53,7 +67,15 @@ const MediaUploader = ({
 
           {publicId ? (
             <div className="cursort-pointer overflow-hidden rounded-[10px]">
-              {/* <CldImage /> */}
+              <CldImage
+                width={getImageSize(type, image, "width")}
+                height={getImageSize(type, image, "height")}
+                src={publicId}
+                alt="image"
+                sizes={"(max-width: 767px) 100vw, 50vw"}
+                placeholder={dataUrl as PlaceholderValue}
+                className="media-uploader_cldImage"
+              />
             </div>
           ) : (
             <div className="media-uploader_cta" onClick={() => open()}>
