@@ -91,3 +91,22 @@ export async function updateCredits(userId: string, creditFee: number) {
     handleError(error);
   }
 }
+
+// USE CREDIT
+export async function updateCredit(userId: string, creditFee: number) {
+  try {
+    await connectToDatabase();
+
+    const updateUserCredits = await User.findOneAndUpdate(
+      { _id: userId },
+      { $inc: { credits: creditFee } },
+      { new: true }
+    );
+
+    if (!updateUserCredits) throw new Error("User credit update failed");
+
+    return JSON.parse(JSON.stringify(updateUserCredits));
+  } catch (error) {
+    handleError(error);
+  }
+}
