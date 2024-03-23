@@ -1,10 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { connectToDatabase } from "../database/mongoose";
-import { handleError } from "../utils";
-import User from "../database/models/user.model";
-import Image from "../database/models/image.model";
+import { connectToDatabase } from "@/lib/database/mongoose";
+import { handleError } from "@/lib/utils";
+import User from "@/lib/database/models/user.model";
+import Image from "@/lib/database/models/image.model";
 import { redirect } from "next/navigation";
 
 import { v2 as cloudinary } from "cloudinary";
